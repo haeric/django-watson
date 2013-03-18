@@ -176,8 +176,9 @@ class PostgresSearchBackend(SearchBackend):
         """Checks whether django-watson is installed."""
         cursor = connection.cursor()
         cursor.execute("""        
-            SELECT attname FROM pg_attribute
-            WHERE attrelid = (SELECT oid FROM pg_class WHERE relname = 'watson_searchentry') AND attname = 'search_tsv';
+            SELECT column_name 
+            FROM information_schema.columns 
+            WHERE table_name='watson_searchentry' and column_name='search_tsv';
         """)
         return bool(cursor.fetchall())
     
